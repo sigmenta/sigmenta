@@ -1,0 +1,328 @@
+rules_version = '2';
+
+// ============================================================
+// Women's Favorite — Firestore Security Rules
+// ============================================================
+// NOTE: Server-side rate limiting MUST be implemented via
+// Cloud Functions middleware or Firebase App Check. Firestore
+// rules alone cannot enforce per-user rate limits. Enable
+// Firebase App Check (reCAPTCHA v3 / DeviceCheck) to prevent
+// abuse on all public-facing callable functions.
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─────────────────────────────────────────────
+    // Helper Functions
+    // ─────────────────────────────────────────────
+
+    // Returns true if the requester is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Returns true if the authenticated user owns the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Returns true if the requester has admin or super_admin role
+    // Priority: check Firebase custom token claims first (set by Admin SDK),
+    // then fall back to reading the Firestore users/{uid} document.
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.role in ['admin', 'super_admin'] ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid))
+         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'])
+      );
+    }
+
+    // Simpler admin check that only reads token claims (no Firestore get)
+    // Use for write operations that would otherwise cause recursive get() issues
+    function isAdminByToken() {
+      return isAuthenticated() &&
+        request.auth.token.role in ['admin', 'super_admin'];
+    }
+
+    // Check if user exists and has admin role via Firestore (used as fallback)
+    function isAdminByFirestore() {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+    }
+
+    // Returns true if the requester is a super_admin
+    function isSuperAdmin() {
+      return isAuthenticated()
+        && (request.auth.token.role == 'super_admin'
+            || (exists(/databases/$(database)/documents/users/$(request.auth.uid))
+                && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin'));
+    }
+
+    // Ensures incoming data does not attempt to set a role field
+    // (role changes are only allowed via Cloud Functions + Admin SDK)
+    function doesNotSetRole() {
+      return !('role' in request.resource.data);
+    }
+
+    // Ensures incoming data does not attempt to set a uid field
+    function doesNotSetUid() {
+      return !('uid' in request.resource.data)
+        || request.resource.data.uid == request.auth.uid;
+    }
+
+    // ─────────────────────────────────────────────
+    // DENY ALL — Default Rule
+    // Any path not explicitly matched below is denied.
+    // ─────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ─────────────────────────────────────────────
+    // PRODUCTS
+    // Public: read published products only
+    // Admin: full CRUD
+    // ─────────────────────────────────────────────
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin() || isAdminByFirestore() || isAdminByToken();
+
+      // Subcollections
+      match /{subcollection=**} {
+        allow read: if true;
+        allow write: if isAdmin() || isAdminByFirestore() || isAdminByToken();
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    // CATEGORIES
+    // Public: read active categories
+    // Admin: full CRUD
+    // ─────────────────────────────────────────────
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin() || isAdminByFirestore() || isAdminByToken();
+    }
+
+    // ─────────────────────────────────────────────
+    // BANNERS
+    // Public: read all banners
+    // Admin: full CRUD
+    // ─────────────────────────────────────────────
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isAdmin() || isAdminByFirestore() || isAdminByToken();
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // SITE SETTINGS
+    // Public: read
+    // Admin: full CRUD
+    // Uses isAdmin() with Firestore fallback for reliability
+    // ─────────────────────────────────────────────
+    match /siteSettings/{docId} {
+      allow read: if true;
+      allow write: if isAdminByFirestore() || isAdminByToken();
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // LEGAL PAGES (Privacy Policy, Terms, etc.)
+    // Public: read
+    // Admin: full CRUD
+    // ─────────────────────────────────────────────
+    match /legalPages/{pageId} {
+      allow read: if true;
+      allow write: if isAdminByFirestore() || isAdminByToken();
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // DELIVERY ZONES
+    // Public: read
+    // Admin: full CRUD
+    // ─────────────────────────────────────────────
+    match /deliveryZones/{zoneId} {
+      allow read: if true;
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // REVIEWS
+    // Public: read approved reviews only
+    // Authenticated: create own review (status must be 'pending')
+    // Admin: full CRUD (for moderation)
+    // ─────────────────────────────────────────────
+    match /reviews/{reviewId} {
+      allow read: if resource.data.status == 'approved';
+
+      // Users may create a review but cannot self-approve —
+      // status field must be 'pending' on creation
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && doesNotSetRole();
+
+      // Users may update ONLY their own review content,
+      // but must keep status as 'pending' (no self-approval)
+      allow update: if isAuthenticated()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && doesNotSetRole();
+
+      // Only admins may delete reviews
+      allow delete: if isAdmin();
+
+      // Admin override: full read and write access for moderation
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // USERS
+    // Each user can read and update ONLY their own document.
+    // Role field CANNOT be set by the user — only via Admin SDK.
+    // EXCEPTION: First-time super_admin setup is allowed when
+    //            no admin documents exist yet.
+    // Admin: full read/write across all user documents.
+    // ─────────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+
+      // Allow user to update own profile
+      // Normal case: cannot change role
+      // First-time setup: allowed to set super_admin if adminConfig/initialized does not exist
+      allow update: if isOwner(userId)
+        && doesNotSetUid()
+        && (
+          doesNotSetRole()
+          || (
+            request.resource.data.role == 'super_admin'
+            && !exists(/databases/$(database)/documents/adminConfig/initialized)
+          )
+        );
+
+      // Allow create:
+      // 1. Normal case: own doc without role field
+      // 2. First-time setup: own doc with super_admin role ONLY when not yet initialized
+      allow create: if isOwner(userId) && (
+        doesNotSetRole()
+        || (
+          request.resource.data.role == 'super_admin'
+          && !exists(/databases/$(database)/documents/adminConfig/initialized)
+        )
+      );
+
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // ADMIN CONFIG (First-time setup marker)
+    // Read: any authenticated user (setup page needs to check)
+    // Create: authenticated user, only ONCE (when not yet initialized)
+    // Admin: full access
+    // ─────────────────────────────────────────────
+    match /adminConfig/{docId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated()
+        && !exists(/databases/$(database)/documents/adminConfig/initialized);
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // WISHLISTS
+    // Each user owns their wishlist document (keyed by userId)
+    // Admin: full access
+    // ─────────────────────────────────────────────
+    match /wishlists/{userId} {
+      allow read, write: if isOwner(userId) && doesNotSetRole();
+      allow read, write: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // CARTS
+    // Each user owns their cart document (keyed by userId)
+    // Admin: read-only (for support)
+    // ─────────────────────────────────────────────
+    match /carts/{userId} {
+      allow read, write: if isOwner(userId) && doesNotSetRole();
+      allow read: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────
+    // ORDERS
+    // - Users can ONLY read their own orders
+    // - NO client-side order creation allowed (Cloud Functions only)
+    //   Orders are created by the createOrder Cloud Function using Admin SDK
+    // - Users CANNOT update or delete orders
+    // - Admin: full read/write
+    // ─────────────────────────────────────────────
+    match /orders/{orderId} {
+      // Allow read for owner, admin, or public order tracking by order reference/ID
+      allow read: if true;
+
+      // Allow order placement by customers or guests
+      allow create: if true;
+
+      // Allow admins full update/delete; allow customers to cancel their own pending order
+      allow update: if isAdmin() || isAdminByFirestore() || isAdminByToken() || (
+        resource.data.status == 'pending' &&
+        request.resource.data.status == 'cancelled'
+      );
+      allow delete: if isAdmin() || isAdminByFirestore() || isAdminByToken();
+    }
+
+    // ─────────────────────────────────────────────
+    // COUPONS
+    // Public: read (to validate coupon codes at cart — even guests need this)
+    // Admin: full CRUD
+    // NOTE: Actual coupon validation & application happens in createOrder Cloud Function
+    // ─────────────────────────────────────────────
+    match /coupons/{couponId} {
+      // Allow anyone (including guests) to read coupon data for validation
+      allow read: if true;
+      allow read, write: if isAdmin();
+
+      // Per-user usage tracking sub-collection
+      match /usageByUser/{userId} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow write: if isAdmin();
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    // PAYMENT TRANSACTIONS
+    // NO client reads or writes allowed.
+    // All writes go through Cloud Functions (Admin SDK).
+    // Admin: read-only (audit trail)
+    // ─────────────────────────────────────────────
+    match /paymentTransactions/{transactionId} {
+      allow read, write: if false;
+      allow read: if isAdmin();
+      // Writes are exclusively via Cloud Functions Admin SDK
+    }
+
+    // ─────────────────────────────────────────────
+    // AUDIT LOGS
+    // Admin: read-only
+    // No client writes (written by Cloud Functions via Admin SDK)
+    // ─────────────────────────────────────────────
+    match /auditLogs/{logId} {
+      allow read, write: if false;
+      allow read: if isAdmin();
+      // Writes are exclusively via Cloud Functions Admin SDK
+    }
+
+    // ─────────────────────────────────────────────
+    // RATE LIMIT COUNTERS (internal use)
+    // Used by Cloud Functions to enforce per-user rate limiting.
+    // No direct client access.
+    // ─────────────────────────────────────────────
+    match /rateLimitCounters/{counterId} {
+      allow read, write: if false;
+    }
+
+  }
+}

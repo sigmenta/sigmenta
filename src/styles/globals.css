@@ -1,0 +1,897 @@
+/* =============================================================================
+   Sigmenta™ — Global Styles & Multi-Theme System
+   Wear Your Style — Unisex, Black & White, Dark, & Royal Themes
+   ============================================================================= */
+
+/* --------------------------------------------------------------------------
+   Tailwind layers
+   -------------------------------------------------------------------------- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --------------------------------------------------------------------------
+   CSS custom properties — Sigmenta Multi-Theme System
+   -------------------------------------------------------------------------- */
+
+/* ── 1. Default: Modern Unisex (Loved by both Men & Women) ── */
+:root, [data-theme="unisex"] {
+  /* Brand palette - Modern Jet Slate & Crisp Off-White */
+  --color-primary:        #0F172A; /* Onyx / Jet Slate */
+  --color-primary-hover:  #1E293B;
+  --color-primary-light:  #CBD5E1;
+  --color-primary-soft:   #F1F5F9;
+  --color-bg-light:       #F8FAFC;
+  --color-dark:           #0F172A;
+  --color-dark-muted:     #334155;
+  --color-text-body:      #1E293B;
+  --color-text-muted:     #64748B;
+  --color-border:         #E2E8F0;
+  --color-accent:         #2563EB; /* Clean Cobalt */
+  --color-success:        #10B981;
+  --color-warning:        #F59E0B;
+  --color-error:          #EF4444;
+  --color-info:           #3B82F6;
+
+  /* Typography scale */
+  --font-sans:  'Inter', 'Hind Siliguri', system-ui, sans-serif;
+  --font-serif: 'Inter', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing & layout */
+  --radius-sm:  0.25rem;  /* 4px  */
+  --radius-md:  0.5rem;   /* 8px  */
+  --radius-lg:  1rem;     /* 16px */
+  --radius-xl:  1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px 0 rgb(15 23 42 / 0.06);
+  --shadow-md:  0 4px 12px 0 rgb(15 23 42 / 0.08);
+  --shadow-lg:  0 8px 24px 0 rgb(15 23 42 / 0.12);
+  --shadow-card: 0 2px 8px 0 rgb(15 23 42 / 0.05);
+
+  /* Transitions */
+  --duration-fast:   150ms;
+  --duration-normal: 250ms;
+  --duration-slow:   400ms;
+  --ease-default:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout */
+  --max-w-content: 1280px;
+  --header-height: 64px;
+}
+
+/* ── 2. Black & White Minimalist (High Fashion & Streetwear Noir) ── */
+[data-theme="bw"], .theme-bw {
+  --color-primary:        #000000;
+  --color-primary-hover:  #262626;
+  --color-primary-light:  #E5E5E5;
+  --color-primary-soft:   #F5F5F5;
+  --color-bg-light:       #FFFFFF;
+  --color-dark:           #000000;
+  --color-dark-muted:     #404040;
+  --color-text-body:      #171717;
+  --color-text-muted:     #737373;
+  --color-border:         #E5E5E5;
+  --color-accent:         #000000;
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.08);
+  --shadow-md:  0 4px 12px 0 rgb(0 0 0 / 0.10);
+  --shadow-lg:  0 8px 24px 0 rgb(0 0 0 / 0.14);
+  --shadow-card: 0 1px 6px 0 rgb(0 0 0 / 0.06);
+}
+
+/* ── 3. Midnight Dark Mode (Nocturnal Cyber & Obsidian) ── */
+[data-theme="dark"], .dark {
+  --color-primary:        #FFFFFF;
+  --color-primary-hover:  #E2E8F0;
+  --color-primary-light:  #334155;
+  --color-primary-soft:   #1E293B;
+  --color-bg-light:       #0B0F19;
+  --color-dark:           #FFFFFF;
+  --color-dark-muted:     #94A3B8;
+  --color-text-body:      #E2E8F0;
+  --color-text-muted:     #94A3B8;
+  --color-border:         #1E293B;
+  --color-accent:         #38BDF8;
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.5);
+  --shadow-md:  0 4px 12px 0 rgb(0 0 0 / 0.6);
+  --shadow-lg:  0 8px 24px 0 rgb(0 0 0 / 0.7);
+  --shadow-card: 0 2px 8px 0 rgb(0 0 0 / 0.6);
+}
+
+/* ── 4. Royal Luxury (Navy & Champagne Gold) ── */
+[data-theme="royal"], .theme-royal {
+  --color-primary:        #0F172A;
+  --color-primary-hover:  #1E293B;
+  --color-primary-light:  #FEF3C7;
+  --color-primary-soft:   #FFFBEB;
+  --color-bg-light:       #F8FAFC;
+  --color-dark:           #0F172A;
+  --color-dark-muted:     #334155;
+  --color-text-body:      #1E293B;
+  --color-text-muted:     #64748B;
+  --color-border:         #E2E8F0;
+  --color-accent:         #D97706; /* Champagne Gold */
+  --shadow-sm:  0 1px 3px 0 rgb(217 119 6 / 0.08);
+  --shadow-md:  0 4px 12px 0 rgb(217 119 6 / 0.12);
+  --shadow-lg:  0 8px 24px 0 rgb(217 119 6 / 0.16);
+  --shadow-card: 0 2px 8px 0 rgb(15 23 42 / 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   Base resets & defaults
+   -------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  body {
+    background-color: var(--color-bg-light);
+    color: var(--color-text-body);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Heading font */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    color: inherit;
+    line-height: 1.25;
+  }
+
+  /* Links */
+  a {
+    color: inherit;
+    text-decoration-skip-ink: auto;
+    transition: color var(--duration-fast) var(--ease-default);
+  }
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+
+  footer a {
+    color: #CBD5E1 !important;
+  }
+  footer a:hover {
+    color: #FFFFFF !important;
+  }
+
+
+  /* Images */
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Buttons reset */
+  button {
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Input reset */
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Text selection colour
+   -------------------------------------------------------------------------- */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-dark);
+}
+::-moz-selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Custom scrollbar — thin, pink-themed (WebKit)
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-light);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-bg-light);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-light) var(--color-bg-light);
+}
+
+/* --------------------------------------------------------------------------
+   Focus-visible ring
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Remove focus ring for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   Component layer
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* ------------------------------------------------------------------
+     .container — centred, max-width, responsive padding
+     ------------------------------------------------------------------ */
+  .container {
+    @apply mx-auto w-full px-4;
+    max-width: var(--max-w-content);
+  }
+  @screen sm {
+    .container {
+      @apply px-6;
+    }
+  }
+  @screen lg {
+    .container {
+      @apply px-8;
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     .btn — base button styles (extend with variant classes)
+     ------------------------------------------------------------------ */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full
+           px-5 py-2.5 text-sm font-semibold
+           transition-all duration-200 focus-visible:outline
+           focus-visible:outline-2 focus-visible:outline-offset-2
+           disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn text-white;
+    background-color: var(--color-primary);
+    transition: background-color var(--duration-fast) var(--ease-default);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-primary-hover);
+  }
+
+  .btn-outline {
+    @apply btn border;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  .btn-outline:hover {
+    background-color: var(--color-primary-soft);
+  }
+
+  .btn-ghost {
+    @apply btn;
+    color: var(--color-primary);
+  }
+  .btn-ghost:hover {
+    background-color: var(--color-primary-soft);
+  }
+
+  /* ------------------------------------------------------------------
+     .card
+     ------------------------------------------------------------------ */
+  .card {
+    @apply rounded-2xl bg-white p-4 shadow-[var(--shadow-card)]
+           transition-shadow duration-200 hover:shadow-[var(--shadow-md)];
+    border: 1px solid var(--color-border);
+  }
+
+  /* ------------------------------------------------------------------
+     .badge
+     ------------------------------------------------------------------ */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5
+           text-xs font-medium;
+  }
+  .badge-primary {
+    @apply badge;
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+  }
+  .badge-success {
+    @apply badge bg-green-100 text-green-700;
+  }
+  .badge-warning {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+  .badge-error {
+    @apply badge bg-red-100 text-red-700;
+  }
+
+  /* ------------------------------------------------------------------
+     .input-base
+     ------------------------------------------------------------------ */
+  .input-base {
+    @apply block w-full rounded-lg border border-[#EDD5DE]
+           bg-white px-3.5 py-2.5 text-sm text-[#3D3240]
+           placeholder:text-[#A99BA6]
+           transition-colors duration-150
+           focus:border-[#D45D83] focus:outline-none focus:ring-2
+           focus:ring-[#D45D83]/20
+           disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60;
+  }
+
+  /* ------------------------------------------------------------------
+     .prose-brand — rich text / CMS content
+     ------------------------------------------------------------------ */
+  .prose-brand {
+    @apply max-w-none text-[#3D3240];
+
+    & h1, & h2, & h3, & h4 {
+      font-family: var(--font-serif);
+      color: var(--color-dark);
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    & p {
+      margin-bottom: 1em;
+      line-height: 1.75;
+    }
+
+    & a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    & a:hover {
+      color: var(--color-primary-hover);
+    }
+
+    & ul, & ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1em;
+    }
+    & li {
+      margin-bottom: 0.25em;
+    }
+
+    & blockquote {
+      border-left: 3px solid var(--color-primary-light);
+      padding-left: 1rem;
+      color: var(--color-text-muted);
+      font-style: italic;
+      margin: 1.5em 0;
+    }
+
+    & code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      background: var(--color-primary-soft);
+      padding: 0.15em 0.4em;
+      border-radius: var(--radius-sm);
+    }
+
+    & img {
+      border-radius: var(--radius-lg);
+      margin: 1.5em auto;
+    }
+
+    & hr {
+      border-color: var(--color-border);
+      margin: 2em 0;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utility layer
+   -------------------------------------------------------------------------- */
+@layer utilities {
+  /* Safe-area padding for mobile notch / home-bar */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Line-clamp helpers */
+  .line-clamp-1  { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1;  -webkit-box-orient: vertical; }
+  .line-clamp-2  { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2;  -webkit-box-orient: vertical; }
+  .line-clamp-3  { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3;  -webkit-box-orient: vertical; }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply animate-pulse rounded bg-[#F7C8D5]/60;
+  }
+
+  /* Aspect-ratio helpers (supplements Tailwind's built-in ones) */
+  .aspect-product { aspect-ratio: 4 / 5; }
+  .aspect-banner  { aspect-ratio: 16 / 7; }
+}
+
+/* --------------------------------------------------------------------------
+   Print styles
+   -------------------------------------------------------------------------- */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  /* Hide navigation and non-content elements */
+  header,
+  footer,
+  nav,
+  aside,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Page breaks */
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Legal Page Content Styling (.legal-content)
+   Applied to Privacy Policy, Terms, Refund, Shipping pages
+   -------------------------------------------------------------------------- */
+.legal-content h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #292329;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #F7C8D5;
+}
+
+.legal-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #D45D83;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.legal-content p {
+  margin-bottom: 0.875rem;
+  line-height: 1.8;
+  color: #3D3240;
+}
+
+.legal-content ul,
+.legal-content ol {
+  margin-left: 1.25rem;
+  margin-bottom: 0.875rem;
+}
+
+.legal-content ul {
+  list-style-type: disc;
+}
+
+.legal-content ol {
+  list-style-type: decimal;
+}
+
+.legal-content li {
+  margin-bottom: 0.375rem;
+  line-height: 1.75;
+  color: #3D3240;
+}
+
+.legal-content strong {
+  font-weight: 700;
+  color: #292329;
+}
+
+.legal-content em {
+  font-style: italic;
+  color: #77717A;
+  font-size: 0.8rem;
+}
+
+.legal-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.legal-content table tr:first-child {
+  background-color: #FFF0F5;
+  font-weight: 700;
+  color: #292329;
+}
+
+.legal-content table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #F0E2E8;
+  color: #3D3240;
+}
+
+/* =============================================================================
+   Sigmenta Dynamic Theme Overrides
+   Adapts legacy & arbitrary utility classes to active theme CSS variables
+   ============================================================================= */
+
+/* Primary brand background */
+.bg-\[\#D45D83\],
+.bg-brand-primary {
+  background-color: var(--color-primary) !important;
+}
+
+/* Primary brand hover background */
+.hover\:bg-\[\#B8446C\]:hover,
+.hover\:bg-\[\#C04A70\]:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+
+/* Primary brand text */
+.text-\[\#D45D83\],
+.text-brand-primary {
+  color: var(--color-primary) !important;
+}
+
+/* Primary hover text */
+.hover\:text-\[\#D45D83\]:hover {
+  color: var(--color-primary-hover) !important;
+}
+
+/* Primary border */
+.border-\[\#D45D83\],
+[class*="focus:border-[#D45D83]"]:focus,
+.border-brand-primary {
+  border-color: var(--color-primary) !important;
+}
+
+
+/* Focus rings */
+[class*="focus:ring-[#D45D83]"]:focus {
+  --tw-ring-color: var(--color-primary) !important;
+}
+
+/* Soft backgrounds (replacing pink tints with neutral/slate/accent) */
+.bg-\[\#FFF8FA\],
+[class*="bg-[#FFF8FA]"] {
+  background-color: var(--color-bg-light) !important;
+}
+
+.bg-\[\#FFF0F5\],
+[class*="bg-[#FFF0F5]"] {
+  background-color: var(--color-primary-soft) !important;
+}
+
+.bg-\[\#F7C8D5\],
+[class*="bg-[#F7C8D5]"],
+.bg-pink-50,
+.bg-pink-100 {
+  background-color: var(--color-primary-light) !important;
+}
+
+/* Borders */
+.border-\[\#F0E2E8\],
+[class*="border-[#F0E2E8]"],
+.border-\[\#EDD5DE\],
+[class*="border-[#EDD5DE]"],
+.border-pink-100,
+.border-pink-200 {
+  border-color: var(--color-border) !important;
+}
+
+/* Body / dark text */
+.text-\[\#292329\],
+[class*="text-[#292329]"] {
+  color: var(--color-dark) !important;
+}
+
+.text-\[\#77717A\],
+[class*="text-[#77717A]"],
+.text-\[\#7A6E78\],
+[class*="text-[#7A6E78]"] {
+  color: var(--color-text-muted) !important;
+}
+
+/* SVG Fill & Stroke */
+.fill-\[\#D45D83\],
+[class*="fill-[#D45D83]"] {
+  fill: var(--color-primary) !important;
+}
+
+.stroke-\[\#D45D83\],
+[class*="stroke-[#D45D83]"] {
+  stroke: var(--color-primary) !important;
+}
+
+/* ── Dark Mode Adaptations ── */
+.dark body, [data-theme="dark"] body {
+  background-color: #0B0F19 !important;
+  color: #E2E8F0 !important;
+}
+
+.dark .bg-white, [data-theme="dark"] .bg-white {
+  background-color: #111827 !important;
+  color: #F8FAFC !important;
+}
+
+.dark .text-\[\#292329\], [data-theme="dark"] .text-\[\#292329\] {
+  color: #FFFFFF !important;
+}
+
+.dark .border-\[\#F0E2E8\], [data-theme="dark"] .border-\[\#F0E2E8\],
+.dark .border-gray-100, [data-theme="dark"] .border-gray-100 {
+  border-color: #1E293B !important;
+}
+
+.dark .shadow-sm, [data-theme="dark"] .shadow-sm {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark input, [data-theme="dark"] input,
+.dark textarea, [data-theme="dark"] textarea,
+.dark select, [data-theme="dark"] select {
+  background-color: #1E293B !important;
+  color: #FFFFFF !important;
+  border-color: #334155 !important;
+}
+
+.dark .btn-primary, [data-theme="dark"] .btn-primary {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+}
+.dark .btn-primary:hover, [data-theme="dark"] .btn-primary:hover {
+  background-color: #E2E8F0 !important;
+}
+
+/* =============================================================================
+   ADMIN PANEL THEMES — শুধু Admin Panel-এ প্রযোজ্য, Homepage-এ নয়
+   Applies ONLY inside [data-admin-theme="..."] — never affects the public site
+   ============================================================================= */
+
+/* ── Admin: Black & White ── */
+[data-admin-theme="bw"] {
+  --adm-bg: #FFFFFF;
+  --adm-sidebar-bg: #000000;
+  --adm-sidebar-text: #FFFFFF;
+  --adm-sidebar-active: #FFFFFF;
+  --adm-sidebar-active-text: #000000;
+  --adm-sidebar-hover: rgba(255,255,255,0.1);
+  --adm-content-bg: #F5F5F5;
+  --adm-card-bg: #FFFFFF;
+  --adm-border: #E0E0E0;
+  --adm-primary: #000000;
+  --adm-primary-hover: #333333;
+  --adm-text: #000000;
+  --adm-text-muted: #555555;
+}
+
+[data-admin-theme="bw"] .admin-sidebar {
+  background: var(--adm-sidebar-bg) !important;
+  border-color: #222 !important;
+}
+[data-admin-theme="bw"] aside {
+  background-color: #000000 !important;
+  border-color: #333 !important;
+}
+[data-admin-theme="bw"] aside p,
+[data-admin-theme="bw"] aside span:not(.badge) {
+  color: #FFFFFF !important;
+}
+[data-admin-theme="bw"] aside a {
+  color: #CCCCCC !important;
+}
+[data-admin-theme="bw"] aside a.active,
+[data-admin-theme="bw"] aside a[class*="bg-[#D45D83]"] {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+}
+[data-admin-theme="bw"] aside a:hover {
+  background: rgba(255,255,255,0.1) !important;
+  color: #FFFFFF !important;
+}
+[data-admin-theme="bw"] main {
+  background-color: #F5F5F5 !important;
+}
+[data-admin-theme="bw"] .bg-white {
+  background-color: #FFFFFF !important;
+}
+[data-admin-theme="bw"] button[class*="bg-[#D45D83]"] {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+[data-admin-theme="bw"] button[class*="bg-[#D45D83]"]:hover {
+  background-color: #333333 !important;
+}
+
+/* ── Admin: Midnight Dark ── */
+[data-admin-theme="dark"] aside {
+  background-color: #0B0F19 !important;
+  border-color: #1E2535 !important;
+}
+[data-admin-theme="dark"] aside p,
+[data-admin-theme="dark"] aside span:not(.badge) {
+  color: #CBD5E1 !important;
+}
+[data-admin-theme="dark"] aside a {
+  color: #94A3B8 !important;
+}
+[data-admin-theme="dark"] aside a:hover {
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: #38BDF8 !important;
+}
+[data-admin-theme="dark"] aside a[class*="bg-[#D45D83]"] {
+  background: #38BDF8 !important;
+  color: #0B0F19 !important;
+}
+[data-admin-theme="dark"] .min-h-screen {
+  background-color: #111827 !important;
+}
+[data-admin-theme="dark"] main {
+  background-color: #111827 !important;
+}
+[data-admin-theme="dark"] .bg-white {
+  background-color: #1E2535 !important;
+  color: #E2E8F0 !important;
+}
+[data-admin-theme="dark"] .bg-gray-50 {
+  background-color: #111827 !important;
+}
+[data-admin-theme="dark"] .border-gray-100,
+[data-admin-theme="dark"] .border-\[#F0E2E8\] {
+  border-color: #1E2535 !important;
+}
+[data-admin-theme="dark"] h1, [data-admin-theme="dark"] h2,
+[data-admin-theme="dark"] h3, [data-admin-theme="dark"] h4 {
+  color: #F1F5F9 !important;
+}
+[data-admin-theme="dark"] p, [data-admin-theme="dark"] span,
+[data-admin-theme="dark"] td, [data-admin-theme="dark"] th,
+[data-admin-theme="dark"] label {
+  color: #CBD5E1 !important;
+}
+[data-admin-theme="dark"] input,
+[data-admin-theme="dark"] textarea,
+[data-admin-theme="dark"] select {
+  background-color: #1E2535 !important;
+  color: #E2E8F0 !important;
+  border-color: #334155 !important;
+}
+[data-admin-theme="dark"] button[class*="bg-[#D45D83]"] {
+  background-color: #38BDF8 !important;
+  color: #0B0F19 !important;
+}
+[data-admin-theme="dark"] button[class*="bg-[#D45D83]"]:hover {
+  background-color: #0EA5E9 !important;
+}
+[data-admin-theme="dark"] header {
+  background-color: #0B0F19 !important;
+  border-color: #1E2535 !important;
+}
+
+/* ── Admin: Royal Luxury ── */
+[data-admin-theme="royal"] aside {
+  background-color: #0F172A !important;
+  border-color: #1E293B !important;
+}
+[data-admin-theme="royal"] aside p,
+[data-admin-theme="royal"] aside span:not(.badge) {
+  color: #FEF3C7 !important;
+}
+[data-admin-theme="royal"] aside a {
+  color: #D4B896 !important;
+}
+[data-admin-theme="royal"] aside a:hover {
+  background: rgba(217, 119, 6, 0.15) !important;
+  color: #F59E0B !important;
+}
+[data-admin-theme="royal"] aside a[class*="bg-[#D45D83]"] {
+  background: #D97706 !important;
+  color: #FEF3C7 !important;
+}
+[data-admin-theme="royal"] .min-h-screen {
+  background-color: #0F172A !important;
+}
+[data-admin-theme="royal"] main {
+  background-color: #0F172A !important;
+}
+[data-admin-theme="royal"] .bg-white {
+  background-color: #1E293B !important;
+  color: #FEF3C7 !important;
+}
+[data-admin-theme="royal"] .bg-gray-50 {
+  background-color: #0F172A !important;
+}
+[data-admin-theme="royal"] .border-gray-100,
+[data-admin-theme="royal"] .border-\[#F0E2E8\] {
+  border-color: #293548 !important;
+}
+[data-admin-theme="royal"] h1, [data-admin-theme="royal"] h2,
+[data-admin-theme="royal"] h3, [data-admin-theme="royal"] h4 {
+  color: #FFFBEB !important;
+}
+[data-admin-theme="royal"] p, [data-admin-theme="royal"] span,
+[data-admin-theme="royal"] td, [data-admin-theme="royal"] th,
+[data-admin-theme="royal"] label {
+  color: #FEF3C7 !important;
+}
+[data-admin-theme="royal"] input,
+[data-admin-theme="royal"] textarea,
+[data-admin-theme="royal"] select {
+  background-color: #1E293B !important;
+  color: #FEF3C7 !important;
+  border-color: #293548 !important;
+}
+[data-admin-theme="royal"] button[class*="bg-[#D45D83]"] {
+  background-color: #D97706 !important;
+  color: #FFFBEB !important;
+}
+[data-admin-theme="royal"] button[class*="bg-[#D45D83]"]:hover {
+  background-color: #B45309 !important;
+}
+[data-admin-theme="royal"] header {
+  background-color: #0F172A !important;
+  border-color: #1E293B !important;
+}
+
+/* ── Admin: Modern Unisex (default, no override needed) ── */
+[data-admin-theme="unisex"] {
+  /* Uses default light styles — no override */
+}

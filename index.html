@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+  
+  <head>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Sigmenta",
+  "alternateName": ["সিগমেন্টা", "Sigmenta", "Sigmenta Lifestyle"],
+  "url": "https://sigmenta.web.app/"
+}
+</script>
+<meta property="og:site_name" content="Sigmenta" />
+    <meta name="google-site-verification" content="ERcrEiJdvCwO6-8CY4krAXts3DKCLgyGFLmgEvTCsRM" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="#1C1C1B" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Sigmenta" />
+
+    <!-- Default SEO (will be overridden per page by React Helmet Async) -->
+    <meta
+      name="description"
+      content="Sigmenta™ — Wear Your Style. পুরুষ ও নারী উভয়ের জন্য আধুনিক ও ট্রেন্ডি ফ্যাশন পোশাক ও লাইফস্টাইল কালেকশন।"
+    />
+    <meta name="keywords" content="sigmenta, wear your style, fashion bangladesh, unisex clothing, ঢাকা অনলাইন শপ" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Sigmenta" />
+
+    <!-- Open Graph defaults -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sigmenta" />
+    <meta property="og:locale" content="bn_BD" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+
+    <!-- Google Fonts: Inter (UI) + Hind Siliguri (Bangla) + Playfair Display (Brand) -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/pwa-icon-512.png" />
+    <link rel="shortcut icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- PWA Web App Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <title>Sigmenta™ — Wear Your Style | প্রিমিয়াম ফ্যাশন শপ</title>
+
+    <!-- Inline critical CSS to prevent FOUC on brand background -->
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+
+      html {
+        font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
+        background-color: #F8FAFC;
+        color: #0F172A;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #F8FAFC;
+        min-height: 100dvh;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      #root {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Initial branded splash & loading state to prevent blank screen flash */
+      .app-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        background-color: #1C1C1B;
+        color: #FFFFFF;
+        user-select: none;
+      }
+
+      .app-loading-logo {
+        width: 84px;
+        height: 84px;
+        border-radius: 22px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 255, 255, 0.08);
+        animation: pulseLogo 2s ease-in-out infinite;
+      }
+
+      .app-loading-brand {
+        margin-top: 18px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-weight: 900;
+        font-size: 24px;
+        letter-spacing: 3px;
+        color: #FFFFFF;
+        text-transform: uppercase;
+      }
+
+      .app-loading-tagline {
+        margin-top: 6px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        color: #94A3B8;
+        text-transform: uppercase;
+      }
+
+      .app-loading-bar-wrap {
+        width: 140px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        margin-top: 28px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .app-loading-bar-fill {
+        width: 45%;
+        height: 100%;
+        background: #FFFFFF;
+        border-radius: 999px;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+        animation: barSlide 1.2s ease-in-out infinite;
+      }
+
+      @keyframes pulseLogo {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.04); opacity: 0.92; }
+      }
+
+      @keyframes barSlide {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(250%); }
+      }
+
+      /* Reduce motion for users who prefer it */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Root React mount point -->
+    <div id="root">
+      <!-- Branded splash screen shown before React hydrates -->
+      <div class="app-loading" aria-label="লোড হচ্ছে..." role="status">
+        <img src="/pwa-icon-192.png" alt="Sigmenta" class="app-loading-logo" />
+        <div class="app-loading-brand">Sigmenta</div>
+        <div class="app-loading-tagline">Wear Your Style</div>
+        <div class="app-loading-bar-wrap">
+          <div class="app-loading-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main entry -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

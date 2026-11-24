@@ -1,0 +1,38 @@
+{
+  "name": "Sigmenta — Wear Your Style",
+  "short_name": "Sigmenta",
+  "description": "Sigmenta — Wear Your Style. পুরুষ ও নারী উভয়ের জন্য আধুনিক ও ট্রেন্ডি ফ্যাশন পোশাক ও লাইফস্টাইল কালেকশন।",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1C1C1B",
+  "theme_color": "#1C1C1B",
+  "categories": ["shopping", "lifestyle", "fashion"],
+  "icons": [
+    {
+      "src": "/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

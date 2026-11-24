@@ -1,0 +1,36 @@
+# =============================================================================
+# Women's Favorite — robots.txt
+# Bangladesh women's fashion e-commerce
+# =============================================================================
+
+# Allow all major search engines (Googlebot, Bingbot, etc.)
+User-agent: *
+Allow: /
+
+# Block private / transactional sections
+Disallow: /admin
+Disallow: /admin/
+Disallow: /account
+Disallow: /account/
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /cart
+Disallow: /cart/
+Disallow: /api/
+Disallow: /_/
+
+# Prevent crawling of query-string-only pagination duplicates
+Disallow: /*?page=
+Disallow: /*?sort=
+Disallow: /*?filter=
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://womensfavorite.web.app/sitemap.xml

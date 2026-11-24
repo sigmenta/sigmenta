@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Sleek Dark Rounded Background -->
+  <rect width="64" height="64" rx="16" fill="#111111"/>
+  
+  <!-- Sigmenta S Geometric Logo -->
+  <path d="M44 14L22 14L14 26L34 26C37 26 39 28 39 31C39 34 37 36 34 36L16 36L20 42L42 42L50 30L30 30C27 30 25 28 25 25C25 22 27 20 30 20L48 20L44 14Z" fill="#FFFFFF"/>
+  
+  <!-- 4-Pointed Sparkle Star -->
+  <path d="M52 10C52 14 55 16 58 16C55 16 52 18 52 22C52 18 49 16 46 16C49 16 52 14 52 10Z" fill="#FFFFFF"/>
+</svg>
