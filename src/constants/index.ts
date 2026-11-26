@@ -19,7 +19,7 @@ export const BRAND = {
   email: 'support@sigmenta.com',
   address: 'ঢাকা, বাংলাদেশ',
   addressEn: 'Dhaka, Bangladesh',
-  website: 'https://sigmenta.web.app',
+  website: 'https://www.sigmenta.shop',
   socialMedia: {
     facebook: 'https://www.facebook.com/profile.php?id=61595742368303',
     instagram: 'https://instagram.com/sigmenta.bd',
